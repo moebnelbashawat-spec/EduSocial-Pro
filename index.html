@@ -47,7 +47,6 @@
         .card { background: rgba(255, 255, 255, 0.02); border-radius: 35px; border: 1px solid var(--glass-border); padding: 30px; text-align: center; }
         .icon-modern { width: 85px; height: 85px; background: rgba(255,255,255,0.05); border-radius: 25px; display: grid; place-items: center; margin: 0 auto 20px; font-size: 2.5rem; color: var(--primary); border-bottom: 3px solid var(--primary); }
 
-        /* مودال لعرض الصور والملفات */
         #media-modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); backdrop-filter: blur(15px); display: none; flex-direction: column; align-items: center; justify-content: center; z-index: 10002; padding: 20px; }
         #media-modal img { max-width: 100%; max-height: 80vh; border-radius: 15px; box-shadow: 0 0 30px var(--primary); }
 
@@ -120,7 +119,9 @@
     </div>
 
     <script>
-        const SHARIA_IMAGE = "https://i.ibb.co/XkyYshNf/105032.jpg"; // رابط الصورة التي رفعتها
+        // الروابط المحدثة
+        const SHARIA_IMAGE = "https://i.ibb.co/XkyYshNf/105032.jpg"; 
+        const PLANNING_DRIVE = "https://drive.google.com/file/d/1THN6oIqYh-Qoz_dId1yDwnE6edUaJpjX/view?usp=drivesdk";
 
         const icons = ['fa-users', 'fa-hand-holding-heart', 'fa-child', 'fa-heart'];
         const bg = document.getElementById('bg-container');
@@ -161,10 +162,10 @@
             document.getElementById('user-greet-name').innerText = `أهلاً د. ${user.name} ✨`;
 
             const subs = [
+                {n:"التخطيط الاجتماعي", i:"fa-chart-column", file: PLANNING_DRIVE},
                 {n:"الشريعة الإسلامية", i:"fa-kaaba", file: SHARIA_IMAGE}, 
                 {n:"العمل مع الأفراد", i:"fa-user-tie", file: null},
                 {n:"العمل مع المجتمعات", i:"fa-city", file: null},
-                {n:"التخطيط الاجتماعي", i:"fa-chart-column", file: null},
                 {n:"حاسب آلي", i:"fa-laptop-code", file: null},
                 {n:"زيارات ميدانية", i:"fa-bus", file: null}
             ];
@@ -174,7 +175,7 @@
                     <div class="icon-modern"><i class="fas ${s.i}"></i></div>
                     <h3>${s.n}</h3>
                     <div style="margin-top:20px;">
-                        <div class="action-btn b-file" onclick="openMedia('${s.n}', '${s.file}')">
+                        <div class="action-btn b-file" onclick="handleFileClick('${s.n}', '${s.file}')">
                             <span>الملف المعتمد</span> <i class="fas fa-file-pdf"></i>
                         </div>
                         <div class="action-btn b-video" onclick="alert('سيتوفر الشرح قريباً')">
@@ -185,11 +186,18 @@
             `).join('');
         }
 
-        function openMedia(title, url) {
+        function handleFileClick(title, url) {
             if(!url || url === "null") return alert("الملف غير متوفر حالياً لهذه المادة");
-            document.getElementById('media-title').innerText = title;
-            document.getElementById('media-img').src = url;
-            document.getElementById('media-modal').style.display = 'flex';
+            
+            // إذا كان الرابط من جوجل درايف يفتح في نافذة جديدة
+            if(url.includes("drive.google.com")) {
+                window.open(url, '_blank');
+            } else {
+                // إذا كان صورة يفتح في المودال الداخلي
+                document.getElementById('media-title').innerText = title;
+                document.getElementById('media-img').src = url;
+                document.getElementById('media-modal').style.display = 'flex';
+            }
         }
 
         function closeMedia() { document.getElementById('media-modal').style.display = 'none'; }
